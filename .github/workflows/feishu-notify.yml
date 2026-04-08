@@ -1,0 +1,19 @@
+name: 上传文件同步飞书通知
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  send-notice:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify to Feishu
+        uses: viseshrp/feishu-action@v1
+        with:
+          webhook_url: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          message: |
+            📁 GitHub 有新文件上传啦！
+            上传者：${{ github.actor }}
+            提交信息：${{ github.event.head_commit.message }}
+            查看链接：${{ github.event.compare }}
+            @所有人 请及时查看
