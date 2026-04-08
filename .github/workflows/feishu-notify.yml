@@ -7,13 +7,13 @@ jobs:
   send-notice:
     runs-on: ubuntu-latest
     steps:
-      - name: Notify to Feishu
-        uses: viseshrp/feishu-action@v1
-        with:
-          webhook_url: ${{ secrets.FEISHU_WEBHOOK_URL }}
-          message: |
-            📁 GitHub 有新文件上传啦！
-            上传者：${{ github.actor }}
-            提交信息：${{ github.event.head_commit.message }}
-            查看链接：${{ github.event.compare }}
-            @所有人 请及时查看
+      - name: 发送飞书通知
+        run: |
+          curl -X POST ${{ secrets.FEISHU_WEBHOOK_URL }} \
+          -H "Content-Type: application/json" \
+          -d '{
+            "msg_type": "text",
+            "content": {
+              "text": "📁 GitHub 有新文件上传！\n上传者：${{ github.actor }}\n提交信息：${{ github.event.head_commit.message }}\n查看链接：${{ github.event.compare }}\n@所有人 请及时查看"
+            }
+          }'
